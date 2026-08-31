@@ -12,7 +12,7 @@ export class WhatsAppUrlBuilderService {
   static construirUrlDePedido(
     listaDeItemsEnCarrito,
     montoTotalEnPesos,
-    numeroTelefonoDestinatario = "5491112345678"
+    numeroTelefonoDestinatario = "5492914630483"
   ) {
     if (!Array.isArray(listaDeItemsEnCarrito) || listaDeItemsEnCarrito.length === 0) {
       console.error("WhatsAppUrlBuilderService: El carrito se encuentra vacio.");

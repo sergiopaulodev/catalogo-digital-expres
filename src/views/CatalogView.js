@@ -1,84 +1,86 @@
-/**
- * Vista encargada del renderizado y captura de eventos en la grilla del catálogo de productos.
- */
 export class CatalogView {
   /**
-   * Instancia la vista asociando el contenedor principal del catálogo.
-   * @param {string} identificadorContenedor - ID del elemento HTML contenedor.
+   * @param {string} identificadorContenedor - ID del elemento en el HTML.
    */
-  constructor(identificadorContenedor = "seccionCatalogoProductos") {
-    this.elementoContenedorCatalogo = document.getElementById(identificadorContenedor);
+  constructor(identificadorContenedor) {
+    // Si viene con '#', se lo remueve para getElementById
+    const idLimpio = identificadorContenedor.replace(/^#/, "");
+    this.elementoContenedor = document.getElementById(idLimpio);
 
-    if (!this.elementoContenedorCatalogo) {
-      throw new Error(`CatalogView: No se encontró el contenedor con ID "${identificadorContenedor}".`);
+    if (!this.elementoContenedor) {
+      console.error(
+        `CatalogView: No se encontró el contenedor con ID "${identificadorContenedor}" en el DOM.`
+      );
     }
   }
 
   /**
-   * Asocia una función callback al evento de clic en "Agregar al carrito" mediante delegación de eventos.
-   * @param {Function} funcionManejadoraAgregar - Callback que recibe el ID del producto seleccionado.
+   * Asocia el evento delegando clics en los botones de agregar al carrito.
+   * @param {Function} manejadorEvento 
    */
-  asociarEventoAgregarAlCarrito(funcionManejadoraAgregar) {
-    if (typeof funcionManejadoraAgregar !== "function") {
-      console.error("CatalogView: Se requiere una función callback válida.");
-      return;
-    }
+  asociarEventoAgregarAlCarrito(manejadorEvento) {
+    if (!this.elementoContenedor) return;
 
-    this.elementoContenedorCatalogo.addEventListener("click", (eventoDeClic) => {
-      const botonDisparador = eventoDeClic.target.closest(".tarjeta-producto__boton-agregar");
-      if (!botonDisparador) return;
-
-      const identificadorProductoStr = botonDisparador.dataset.identificadorProducto;
-      const identificadorProductoNumerico = Number(identificadorProductoStr);
-
-      if (!isNaN(identificadorProductoNumerico)) {
-        funcionManejadoraAgregar(identificadorProductoNumerico);
+    this.elementoContenedor.addEventListener("click", (evento) => {
+      const boton = evento.target.closest(".tarjeta-producto__boton-agregar");
+      if (boton) {
+        const identificadorProducto = Number(boton.dataset.identificadorProducto);
+        manejadorEvento(identificadorProducto);
       }
     });
   }
 
   /**
-   * Renderiza la lista de productos dentro del contenedor del catálogo.
-   * @param {Array<Object>} listaDeProductos - Productos a mostrar en la interfaz.
+   * Renderiza las tarjetas de los productos dentro del contenedor.
+   * @param {Array<Object>} listaDeProductos 
    */
-  renderizarCatalogo(listaDeProductos) {
-    if (!Array.isArray(listaDeProductos) || listaDeProductos.length === 0) {
-      this.elementoContenedorCatalogo.innerHTML = `
-        <p class="catalogo-vacio">No hay productos disponibles en el catálogo en este momento.</p>
-      `;
+  renderizarCatalogoProductos(listaDeProductos = []) {
+    if (!this.elementoContenedor) {
+      console.error("CatalogView: Imposible renderizar, elementoContenedor es null.");
       return;
     }
 
-    let htmlAcumulado = '<div class="grilla-catalogo-productos">';
+    if (!Array.isArray(listaDeProductos) || listaDeProductos.length === 0) {
+      this.elementoContenedor.innerHTML = `<p class="catalogo-vacio-mensaje">No hay productos disponibles.</p>`;
+      return;
+    }
 
-    listaDeProductos.forEach((productoItem) => {
-      if (!productoItem.estaDisponibleParaVenta) return;
+    let htmlAcumulado = "";
+
+    listaDeProductos.forEach((producto) => {
+      const precioNumerico = typeof producto.precioProductoEnPesos === "number"
+        ? producto.precioProductoEnPesos
+        : (producto.precioUnitarioEnPesos || 0);
+
+      const imagenUrl = producto.urlImagenProducto || "https://via.placeholder.com/300x200?text=Sin+Imagen";
 
       htmlAcumulado += `
-        <article class="tarjeta-producto" data-identificador-tarjeta="${productoItem.identificadorProducto}">
+        <article class="tarjeta-producto" data-identificador-producto="${producto.identificadorProducto}">
           <img 
-            src="${productoItem.imagenProductoUrl}" 
-            alt="${productoItem.nombreProducto}" 
+            src="${imagenUrl}" 
+            alt="${producto.nombreProducto || 'Producto'}" 
             class="tarjeta-producto__imagen"
             loading="lazy"
           />
-          <div class="tarjeta-producto__cuerpo">
-            <h3 class="tarjeta-producto__nombre">${productoItem.nombreProducto}</h3>
-            <p class="tarjeta-producto__precio">$${productoItem.precioProductoEnPesos.toFixed(2)}</p>
-            <button 
-              type="button" 
-              class="tarjeta-producto__boton-agregar"
-              data-identificador-producto="${productoItem.identificadorProducto}"
-            >
-              Agregar al carrito
-            </button>
+          <div class="tarjeta-producto__contenido">
+            <span class="tarjeta-producto__categoria">${producto.categoriaProducto || 'General'}</span>
+            <h3 class="tarjeta-producto__titulo">${producto.nombreProducto || 'Sin título'}</h3>
+            <p class="tarjeta-producto__descripcion">${producto.descripcionProducto || ''}</p>
+            <div class="tarjeta-producto__pie">
+              <span class="tarjeta-producto__precio">$${precioNumerico.toFixed(2)}</span>
+              <button 
+                type="button" 
+                class="tarjeta-producto__boton-agregar"
+                data-identificador-producto="${producto.identificadorProducto}"
+              >
+                Agregar al carrito
+              </button>
+            </div>
           </div>
         </article>
       `;
     });
 
-    htmlAcumulado += "</div>";
-
-    this.elementoContenedorCatalogo.innerHTML = htmlAcumulado;
+    this.elementoContenedor.innerHTML = htmlAcumulado;
   }
 }
