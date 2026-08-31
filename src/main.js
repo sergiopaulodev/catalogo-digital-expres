@@ -4,30 +4,32 @@
 import { CatalogModel } from "./models/CatalogModel.js";
 import { CartModel } from "./models/CartModel.js";
 import { CatalogView } from "./views/CatalogView.js";
+import { CartView } from "./views/CartView.js";
 import { CatalogController } from "./controllers/CatalogController.js";
-import { instanciadorEventBus } from "./core/EventBus.js";
+import { CartController } from "./controllers/CartController.js";
 
-// 1. Inicializar modelos
-const modeloCatalogo = new CatalogModel();
-const modeloCarrito = new CartModel();
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Instanciar Modelos (Gestión de estado y almacenamiento)
+  const modeloCatalogo = new CatalogModel();
+  const modeloCarrito = new CartModel();
 
-// 2. Inicializar vistas
-const vistaCatalogo = new CatalogView("seccionCatalogoProductos");
+  // 2. Instanciar Vistas (Interfaz de usuario y elementos DOM)
+  const vistaCatalogo = new CatalogView("seccionCatalogoProductos");
+  const vistaCarrito = new CartView(
+    "botonAbrirCarritoCompras",
+    "contadorUnidadesCarritoCompras"
+  );
 
-// 3. Inicializar controladores
-const controladorCatalogo = new CatalogController(
-  modeloCatalogo,
-  modeloCarrito,
-  vistaCatalogo
-);
+  // 3. Instanciar Controladores (Coordinación de flujo y eventos)
+  const controladorCatalogo = new CatalogController(
+    modeloCatalogo,
+    modeloCarrito,
+    vistaCatalogo
+  );
 
-// 4. Suscripción temporal en consola para verificar reactividad del carrito
-instanciadorEventBus.suscribir(CartModel.EVENTO_CARRITO_ACTUALIZADO, (datosCarrito) => {
-  console.log("¡Evento de carrito recibido en main.js!", datosCarrito);
-  
-  // Actualizar contador del encabezado
-  const contadorElemento = document.getElementById("contadorUnidadesCarritoCompras");
-  if (contadorElemento) {
-    contadorElemento.textContent = datosCarrito.cantidadTotalDeUnidades;
-  }
+  const controladorCarrito = new CartController(
+    modeloCarrito,
+    vistaCarrito,
+    "5492910000000" // Reemplazar opcionalmente por tu número de prueba
+  );
 });

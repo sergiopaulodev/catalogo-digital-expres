@@ -70,12 +70,19 @@ export class CartModel {
    * Remueve completamente un ítem del carrito por su ID.
    * @param {number} identificadorProducto - ID del producto a eliminar.
    */
-  eliminarItemPorIdentificador(identificadorProducto) {
+  eliminarProductoPorIdentificador(identificadorProducto) {
     this.listaDeItemsEnCarrito = this.listaDeItemsEnCarrito.filter(
       (itemCarrito) => itemCarrito.identificadorProducto !== identificadorProducto
     );
 
     this.persistirYNotificarCambios();
+  }
+
+  /**
+   * Alias de compatibilidad para evitar roturas por nombrado.
+   */
+  eliminarItemPorIdentificador(identificadorProducto) {
+    this.eliminarProductoPorIdentificador(identificadorProducto);
   }
 
   /**
@@ -112,6 +119,18 @@ export class CartModel {
   }
 
   /**
+   * Obtiene un resumen consolidado con la lista de ítems, el monto total y las unidades.
+   * @returns {Object} Resumen con la estructura esperada por la vista y el controlador.
+   */
+  obtenerResumenActual() {
+    return {
+      listaDeItemsEnCarrito: this.obtenerItemsDelCarrito(),
+      montoTotalAcumuladoEnPesos: this.calcularMontoTotalEnPesos(),
+      cantidadTotalDeUnidades: this.obtenerCantidadTotalDeUnidades()
+    };
+  }
+
+  /**
    * Guarda los cambios y emite la actualización reactiva.
    */
   persistirYNotificarCambios() {
@@ -120,10 +139,15 @@ export class CartModel {
       this.listaDeItemsEnCarrito
     );
 
-    instanciadorEventBus.emitir(CartModel.EVENTO_CARRITO_ACTUALIZADO, {
-      listaDeItemsActualizada: this.obtenerItemsDelCarrito(),
-      montoTotalEnPesos: this.calcularMontoTotalEnPesos(),
-      cantidadTotalDeUnidades: this.obtenerCantidadTotalDeUnidades()
-    });
+    // instanciadorEventBus.emitir(CartModel.EVENTO_CARRITO_ACTUALIZADO, {
+    //   listaDeItemsActualizada: this.obtenerItemsDelCarrito(),
+    //   montoTotalEnPesos: this.calcularMontoTotalEnPesos(),
+    //   cantidadTotalDeUnidades: this.obtenerCantidadTotalDeUnidades()
+    // });
+
+    instanciadorEventBus.emitir(
+      CartModel.EVENTO_CARRITO_ACTUALIZADO,
+      this.obtenerResumenActual()
+    );
   }
 }
