@@ -1,0 +1,20 @@
+/* Estilos para el maquetado de la grilla del catálogo (Mobile-First) */
+.grilla-catalogo-productos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espaciado-contenedor-mediano);
+  margin-top: var(--espaciado-contenedor-mediano);
+}
+
+/* Enfoque Mobile-First: Pantallas medianas y grandes */
+@media (min-width: 600px) {
+  .grilla-catalogo-productos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .grilla-catalogo-productos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
