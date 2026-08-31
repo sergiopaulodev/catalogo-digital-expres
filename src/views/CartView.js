@@ -135,13 +135,23 @@ export class CartView {
    * @param {number} montoTotalEnPesos - Monto acumulado en pesos.
    * @param {number} cantidadTotalDeUnidades - Cantidad total de productos.
    */
+  /**
+   * Renderiza los ítems y el total del carrito en la interfaz.
+   * @param {Array<Object>} listaDeItems - Lista de productos en el carrito.
+   * @param {number} montoTotalEnPesos - Monto acumulado en pesos.
+   * @param {number} cantidadTotalDeUnidades - Cantidad total de productos.
+   */
   renderizarCarrito(
-    listaDeItems,
-    montoTotalEnPesos,
-    cantidadTotalDeUnidades
+    listaDeItems = [],
+    montoTotalEnPesos = 0,
+    cantidadTotalDeUnidades = 0
   ) {
-    this.elementoContadorUnidades.textContent = cantidadTotalDeUnidades;
-    this.elementoMontoTotal.textContent = `$${montoTotalEnPesos.toFixed(2)}`;
+    // Validacion defensiva para evitar TypeError por undefined
+    const totalSeguro = typeof montoTotalEnPesos === "number" ? montoTotalEnPesos : 0;
+    const unidadesSeguras = typeof cantidadTotalDeUnidades === "number" ? cantidadTotalDeUnidades : 0;
+
+    this.elementoContadorUnidades.textContent = unidadesSeguras;
+    this.elementoMontoTotal.textContent = `$${totalSeguro.toFixed(2)}`;
 
     if (!Array.isArray(listaDeItems) || listaDeItems.length === 0) {
       this.elementoContenedorLista.innerHTML = `
@@ -155,15 +165,19 @@ export class CartView {
     let htmlAcumulado = "";
 
     listaDeItems.forEach((itemCarrito) => {
-      const subtotalPorItemEnPesos =
-        itemCarrito.cantidadUnidadesSeleccionadas * itemCarrito.precioUnitarioEnPesos;
+      const precioUnitario = typeof itemCarrito.precioUnitarioEnPesos === "number" 
+        ? itemCarrito.precioUnitarioEnPesos 
+        : 0;
+      
+      const cantidad = itemCarrito.cantidadUnidadesSeleccionadas || 1;
+      const subtotalPorItemEnPesos = cantidad * precioUnitario;
 
       htmlAcumulado += `
         <div class="item-carrito">
           <div class="item-carrito__detalles">
-            <span class="item-carrito__nombre">${itemCarrito.nombreProducto}</span>
+            <span class="item-carrito__nombre">${itemCarrito.nombreProducto || "Producto"}</span>
             <span class="item-carrito__subtotal">
-              ${itemCarrito.cantidadUnidadesSeleccionadas} x $${itemCarrito.precioUnitarioEnPesos.toFixed(2)} = $${subtotalPorItemEnPesos.toFixed(2)}
+              ${cantidad} x $${precioUnitario.toFixed(2)} = $${subtotalPorItemEnPesos.toFixed(2)}
             </span>
           </div>
           <button 
