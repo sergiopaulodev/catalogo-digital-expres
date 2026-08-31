@@ -1,0 +1,27 @@
+<!-- Punto de entrada HTML principal para la Single Page Application (SPA) del Catálogo Digital Express -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo Digital Express</title>
+  <link rel="stylesheet" href="./src/assets/styles/global.css">
+</head>
+<body>
+  <div id="contenedorPrincipalApp">
+    <header class="encabezado-principal">
+      <h1 class="encabezado-principal__titulo">Catálogo Digital Express</h1>
+      <button id="botonAbrirCarritoCompras" class="encabezado-principal__boton-carrito" type="button">
+        Carrito (<span id="contadorUnidadesCarritoCompras">0</span>)
+      </button>
+    </header>
+
+    <main class="contenido-principal">
+      <section id="seccionCatalogoProductos" class="seccion-catalogo"></section>
+      <section id="seccionPanelAdministracion" class="seccion-admin"></section>
+    </main>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

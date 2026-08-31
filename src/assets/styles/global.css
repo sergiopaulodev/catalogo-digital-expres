@@ -1,0 +1,51 @@
+/* Reset CSS y estilos generales para maquetado Mobile-First */
+@import "./variables.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--fuente-familia-base);
+  background-color: var(--color-fondo-principal);
+  color: var(--color-texto-principal);
+  line-height: 1.5;
+  font-size: var(--tamano-texto-base);
+}
+
+.encabezado-principal {
+  background-color: var(--color-superficie-tarjeta);
+  border-bottom: 1px solid var(--color-borde-divisor);
+  padding: var(--espaciado-contenedor-mediano);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.encabezado-principal__titulo {
+  font-size: var(--tamano-texto-subtitulo);
+  color: var(--color-primario-oscuro);
+}
+
+.encabezado-principal__boton-carrito {
+  background-color: var(--color-primario);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radio-borde-suave);
+  padding: var(--espaciado-unitario-base) var(--espaciado-contenedor-mediano);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.contenido-principal {
+  padding: var(--espaciado-contenedor-mediano);
+  max-width: 1200px;
+  margin: 0 auto;
+}
