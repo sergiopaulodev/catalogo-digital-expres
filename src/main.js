@@ -9,27 +9,18 @@ import { CatalogController } from "./controllers/CatalogController.js";
 import { CartController } from "./controllers/CartController.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Instanciar Modelos (Gestión de estado y almacenamiento)
+  // 1. Instanciar Modelos
   const modeloCatalogo = new CatalogModel();
   const modeloCarrito = new CartModel();
 
-  // 2. Instanciar Vistas (Interfaz de usuario y elementos DOM)
+  // 2. Instanciar Vistas
   const vistaCatalogo = new CatalogView("seccionCatalogoProductos");
   const vistaCarrito = new CartView(
     "botonAbrirCarritoCompras",
     "contadorUnidadesCarritoCompras"
   );
 
-  // 3. Instanciar Controladores (Coordinación de flujo y eventos)
-  const controladorCatalogo = new CatalogController(
-    modeloCatalogo,
-    modeloCarrito,
-    vistaCatalogo
-  );
-
-  const controladorCarrito = new CartController(
-    modeloCarrito,
-    vistaCarrito,
-    "5492910000000" // Reemplazar opcionalmente por tu número de prueba
-  );
+  // 3. Instanciar Controladores (Se ejecutan los efectos secundarios del constructor)
+  new CatalogController(modeloCatalogo, modeloCarrito, vistaCatalogo);
+  new CartController(modeloCarrito, vistaCarrito);
 });
