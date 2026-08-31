@@ -1,5 +1,7 @@
 /* Reset CSS y estilos generales para maquetado Mobile-First */
 @import "./variables.css";
+@import "./components.css";
+@import "./layout.css";
 
 *,
 *::before,
