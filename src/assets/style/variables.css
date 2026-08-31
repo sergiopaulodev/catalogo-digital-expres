@@ -1,0 +1,30 @@
+/* Definición de variables CSS globales (Custom Properties) para consistencia visual y diseño */
+:root {
+  /* Paleta de colores */
+  --color-primario: #25d366;
+  --color-primario-oscuro: #128c7e;
+  --color-fondo-principal: #f8f9fa;
+  --color-superficie-tarjeta: #ffffff;
+  --color-texto-principal: #212529;
+  --color-texto-secundario: #6c757d;
+  --color-borde-divisor: #dee2e6;
+  --color-error-alerta: #dc3545;
+
+  /* Tipografía y tamaños */
+  --fuente-familia-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --tamano-texto-pequeno: 0.875rem;
+  --tamano-texto-base: 1rem;
+  --tamano-texto-subtitulo: 1.25rem;
+  --tamano-texto-titulo: 1.75rem;
+
+  /* Espaciados */
+  --espaciado-unitario-base: 8px;
+  --espaciado-contenedor-pequeno: 12px;
+  --espaciado-contenedor-mediano: 16px;
+  --espaciado-contenedor-grande: 24px;
+
+  /* Bordes y Sombras */
+  --radio-borde-suave: 8px;
+  --radio-borde-redondeado: 16px;
+  --sombreacompuesta-tarjeta: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
